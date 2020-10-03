@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        canvas{
+            margin-left: 450px;
+        }
+        .stylebutton {
+  background-color: rgb(206, 196, 55); /* Green */
+  border: none;
+  color: rgb(14, 13, 13);
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+  margin-left: 50px;
+  cursor: pointer;
+  width: 100px;
+  border-radius: 4px;
+}
+.button1{
+    margin-left: 620px;
+}
+    </style>
+<body>
+<canvas id="mycanvas" width="600" height="600" style="background-color: black"></canvas><br><br><br>
+<button class="stylebutton button1" id="forstart">START</button>
+<button class="stylebutton button2" id="forstop">STOP</button>
+<script>
+var canvas = document.getElementById("mycanvas");
+var ctx = canvas.getContext("2d");
+var radius1 = canvas.height / 2;
+ctx.translate(radius1, radius1);
+var radius1 = radius1 * 0.90;
+var radius2 = 45;
+var second = 0;
+var minutes = 0;
+var i=0;
+drawstopwatch();
+document.getElementById("forstart").onclick = function(){
+    if(i>0){
+        clearInterval(starting);
+        second = 0;
+        minutes = 0;
+    }
+    starting =  setInterval(drawstopwatch, 1000);
+    i++;   
+}
+document.getElementById("forstop").onclick = function(){
+    clearInterval(starting);
+}
+function drawstopwatch() {
+  drawouter(ctx,radius1);
+  drawinnernos(ctx, radius1);
+  drawouter2(ctx,radius2);
+  drawinnernos2(ctx,radius2);
+  drawTime(ctx,radius1);
+}
+function drawouter(ctx, radius) {
+  var bordergradient;
+  ctx.beginPath();
+  ctx.arc(0, 0, radius, 0, 2*Math.PI);
+  ctx.fillStyle = 'white';
+  ctx.fill();
+  bordergradient = ctx.createRadialGradient(0,0,radius*0.95, 0,0,radius*1.05);
+  bordergradient.addColorStop(0, 'rgb(206, 196, 55)');
+  bordergradient.addColorStop(0.5, 'white');
+  bordergradient.addColorStop(1, 'rgb(206, 196, 55)');
+  ctx.strokeStyle = bordergradient;
+  ctx.lineWidth = radius*0.1;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(0, 0, radius*0.1, 0, 2*Math.PI);
+  ctx.fillStyle = '#333';
+  ctx.fill();
+}
+function drawinnernos(ctx, radius) {
+  var angle;
+  var num;
+  ctx.font = radius*0.10 + "px arial";
+  ctx.textBaseline="middle";
+  ctx.textAlign="center";
+  for(num = 1; num <=30; num++){
+    angle = num * Math.PI / 15;
+    ctx.rotate(angle);
+    ctx.translate(0, -radius*0.85);
+    ctx.fillRect(0, -30, 2, 10);
+    ctx.rotate(-angle);
+    if(num%2==0){
+    ctx.fillText(num.toString(), 0, 0);}
+    ctx.rotate(angle);
+    ctx.translate(0, radius*0.85);
+    ctx.rotate(-angle);
+  }}
+  function drawouter2(ctx,radius){
+    var bordergradient;
+  ctx.lineWidth = 5;
+  ctx.translate(0,-100);
+  ctx.beginPath();
+  ctx.arc(0, 0, radius, 0, 2*Math.PI);
+  ctx.stroke();
+ ctx.fillStyle = 'white';
+  ctx.fill();
+  }
+  function drawinnernos2(ctx, radius) {
+  var angle;
+  var num;
+  ctx.fillStyle = 'black';
+  ctx.font = radius*0.10 + "px arial";
+  ctx.textBaseline="middle";
+  ctx.textAlign="center";
+  for(num = 1; num <=30; num++){
+    angle = num * Math.PI / 15;
+    ctx.rotate(angle);
+    ctx.translate(0, -radius*0.85);
+    ctx.fillRect(0, -5, 0.3, 5);
+    ctx.rotate(-angle);
+    if(num%2==0){
+    ctx.fillText(num.toString(), 0, 0);}
+    ctx.rotate(angle);
+    ctx.translate(0, radius*0.85);
+    ctx.rotate(-angle);
+  }
+}
+function drawTime(ctx, radius){  
+    second2=(second*Math.PI/15);
+minutes = second/60;
+minutes2=(minutes*Math.PI/15);
+    drawHand(ctx, second2, radius*0.9, radius*0.02);
+    drawHand2(ctx, minutes2, radius2*0.9, radius2*0.02);
+    second++;
+   }
+function drawHand(ctx, pos, length, width) {
+    ctx.translate(0,100);
+    ctx.beginPath();
+    ctx.lineWidth = width;
+    ctx.lineCap = "round";
+    ctx.moveTo(0,0);
+    ctx.rotate(pos);
+    ctx.lineTo(0, -length);
+    ctx.stroke();
+    ctx.rotate(-pos);
+}   
+function drawHand2(ctx, pos, length, width) {
+    ctx.translate(0,-100);
+    ctx.beginPath();
+    ctx.lineWidth = width;
+    ctx.lineCap = "round";
+    ctx.moveTo(0,0);
+    ctx.rotate(pos);
+    ctx.lineTo(0, -length);
+    ctx.stroke();
+    ctx.rotate(-pos);
+    ctx.translate(0,100);
+}   
+</script>
+
+</body>
+</html>
